@@ -1,0 +1,29 @@
+{
+  "replacing": {
+  },
+  "maintainer_email": "YOUR_EMAIL",
+  "description": "Installs/Configures app_test",
+  "groupings": {
+  },
+  "recommendations": {
+  },
+  "attributes": {
+  },
+  "suggestions": {
+  },
+  "dependencies": {
+  },
+  "conflicting": {
+  },
+  "platforms": {
+  },
+  "version": "0.0.1",
+  "recipes": {
+  },
+  "license": "All rights reserved",
+  "long_description": "= DESCRIPTION:\n\n= REQUIREMENTS:\n\n= ATTRIBUTES:\n\n= USAGE:\n\n",
+  "name": "app_test",
+  "providing": {
+  },
+  "maintainer": "YOUR_COMPANY_NAME"
+}

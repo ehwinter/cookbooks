@@ -5,18 +5,28 @@
 # Copyright 2009, Adapp, Inc.
 
 sleep 2
-nodes = []
-search(:node, "*:*") do |z|
-  nodes << z
-end
 
 template "/etc/ssh/ssh_known_hosts" do
-  source "known_hosts.erb"
+  source "known_hosts_git_origin.erb"
   mode 0440
   owner "root"
   group "root"
   backup false
-  variables(
-    :nodes => nodes
-  )
+#  variables(
+#    :nodes => nodes
+#  )
+end
+template "/root/.ssh/known_hosts" do
+  source "known_hosts_git_origin.erb"
+  mode 0440
+  owner "root"
+  group "root"
+  backup false
+end
+template "/home/ubuntu/.ssh/known_hosts" do
+  source "known_hosts_git_origin.erb"
+  mode 0440
+  owner "ubuntu"
+  group "ubuntu"
+  backup false
 end

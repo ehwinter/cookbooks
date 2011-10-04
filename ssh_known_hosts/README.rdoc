@@ -1,5 +1,10 @@
+
+
 = DESCRIPTION: 
 
+This version removes the search and just adds static public keys.
+
+Formerly:
 Build /etc/ssh/known_hosts based on search indexes and build it based on data retrieved by ohai.
 
 = REQUIREMENTS: 

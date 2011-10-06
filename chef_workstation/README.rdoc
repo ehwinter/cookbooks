@@ -1,6 +1,10 @@
 = DESCRIPTION:
 
+chef_workstations - set up walkull with default ssh key in order to allow git interaction, default .bashrc, all git repositries and other code. 
+
 = REQUIREMENTS:
+
+Before running this you must have git, emacs etc, and 
 
 = ATTRIBUTES:
 

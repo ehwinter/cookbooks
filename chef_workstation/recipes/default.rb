@@ -56,6 +56,7 @@ end
 
 jcloud="feedont@feedontheword.com:git/cloud"
 jfisn="feedont@feedontheword.com:git/fisn"
+gh="git@github.com:ehwinter"
 options="--depth 1"
 
 
@@ -69,6 +70,7 @@ git "/home/ubuntu/walkull" do
   action :sync
 end
 
+# from Jerome under cloud subdir.
 git "/home/ubuntu/chef-repo" do
   user "ubuntu"
   group "ubuntu"
@@ -78,8 +80,7 @@ git "/home/ubuntu/chef-repo" do
 end
 
 
-
-# Clone the fisn resources
+# from Jerome FISN subdir.
 %w(fisn-chef-target).each do |dir|
   git "/home/ubuntu/#{dir}" do
     user "ubuntu"
@@ -90,6 +91,39 @@ end
   end
 end
 
+directory "/home/ubuntu/git/" do
+  owner "ubuntu"
+  group "ubuntu"
+  mode 0755
+  action :create
+end
+
+directory "/home/ubuntu/git/fisn/" do
+  owner "ubuntu"
+  group "ubuntu"
+  mode 0755
+  action :create
+end
+
+%w(fisn scripts).each do |dir|
+  git "/home/ubuntu/git/fisn/#{dir}" do
+    user "ubuntu"
+    group "ubuntu"
+    repository "#{jfisn}/#{dir}"
+    reference "master"
+    action :sync
+  end
+end
+
+
+
+git "/home/ubuntu/cookbooks" do
+  user "ubuntu"
+  group "ubuntu"
+  repository "#{gh}/cookbooks.git"
+  reference "master"
+  action :sync
+end
 
 
 
@@ -146,6 +180,6 @@ end
 execute "chmods" do
   command "chmod 0700  .ssh .ssh/* .aws_keys"
   cwd "/home/ubuntu"
-  user "ubuntu"
-  group "ubuntu"
+  user "root"
+  group "root"
 end

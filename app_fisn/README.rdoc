@@ -1,0 +1,10 @@
+= DESCRIPTION:
+
+app_fisn - based on a basic LAMP Stack, get everything needed to create a PR server
+
+= REQUIREMENTS:
+ Lamp stack.
+= ATTRIBUTES:
+
+= USAGE:
+

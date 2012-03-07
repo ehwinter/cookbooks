@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: application
-# Recipe:: wsgi
+# Recipe:: django
 #
 # Copyright 2011, Opscode, Inc.
 #
@@ -26,7 +26,7 @@ include_recipe "python"
 # default application recipe work it's mojo for you.
 ###
 
-node.default[:apps][app['id']][node.app_environment][:run_migrations] = false
+node.default[:apps][app['id']][node.chef_environment][:run_migrations] = false
 
 # the Django split-settings file name varies from project to project...+1 for standardization
 local_settings_full_path = app['local_settings_file'] || 'settings_local.py'
@@ -107,7 +107,7 @@ if app["database_master_role"]
     dbm = node
   else
   # Find the database master
-    results = search(:node, "run_list:role\\[#{app["database_master_role"][0]}\\] AND app_environment:#{node[:app_environment]}", nil, 0, 1)
+    results = search(:node, "role:#{app["database_master_role"][0]} AND chef_environment:#{node.chef_environment}", nil, 0, 1)
     rows = results[0]
     if rows.length == 1
       dbm = rows[0]
@@ -129,8 +129,8 @@ if app["database_master_role"]
       group app["group"]
       mode "644"
       variables(
-        :host => dbm['fqdn'],
-        :database => app['databases'][node.app_environment],
+        :host => (dbm.attribute?('cloud') ? dbm['cloud']['local_ipv4'] : dbm['ipaddress']),
+        :database => app['databases'][node.chef_environment],
         :django_version => django_version
       )
     end
@@ -141,12 +141,12 @@ end
 
 ## Then, deploy
 deploy_revision app['id'] do
-  revision app['revision'][node.app_environment]
+  revision app['revision'][node.chef_environment]
   repository app['repository']
   user app['owner']
   group app['group']
   deploy_to app['deploy_to']
-  action app['force'][node.app_environment] ? :force_deploy : :deploy
+  action app['force'][node.chef_environment] ? :force_deploy : :deploy
   ssh_wrapper "#{app['deploy_to']}/deploy-ssh-wrapper" if app['deploy_key']
   shallow_clone true
   purge_before_symlink([])
@@ -155,15 +155,16 @@ deploy_revision app['id'] do
   before_migrate do
     requirements_file = nil
     # look for requirements.txt files in common locations
-    if ::File.exists?(::File.join(release_path, "requirements", "#{node[:app_environment]}.txt"))
-      requirements_file = ::File.join(release_path, "requirements", "#{node[:app_environment]}.txt")
+    if ::File.exists?(::File.join(release_path, "requirements", "#{node[:chef_environment]}.txt"))
+      requirements_file = ::File.join(release_path, "requirements", "#{node.chef_environment}.txt")
     elsif ::File.exists?(::File.join(release_path, "requirements.txt"))
       requirements_file = ::File.join(release_path, "requirements.txt")
     end
     
     if requirements_file
       Chef::Log.info("Installing pips using requirements file: #{requirements_file}")
-      execute "pip install -E #{ve.path} -r #{requirements_file}" do
+      pip_cmd = File.join(ve.path, "bin", "pip")
+      execute "#{pip_cmd} install -r #{requirements_file}" do
         ignore_failure true
         cwd release_path
       end
@@ -174,7 +175,7 @@ deploy_revision app['id'] do
     local_settings_file_name => local_settings_full_path
   })
 
-  if app['migrate'][node.app_environment] && node[:apps][app['id']][node.app_environment][:run_migrations]
+  if app['migrate'][node.chef_environment] && node[:apps][app['id']][node.chef_environment][:run_migrations]
     migrate true
     migration_command app['migration_command'] || "#{::File.join(ve.path, "bin", "python")} manage.py migrate"
   else

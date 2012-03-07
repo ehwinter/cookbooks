@@ -31,22 +31,22 @@ It is best to declare `chef_handler` resources early on in the compile phase so 
 - supports: type of Chef Handler to register as, ie :report, :exception or both. default is `:report => true, :exception => true`
 
 ### Example
-    
-    # register the Chef::Handler::JsonFile handler 
+
+    # register the Chef::Handler::JsonFile handler
     # that ships with the Chef gem
     chef_handler "Chef::Handler::JsonFile" do
       source "chef/handler/json_file"
       arguments :path => '/var/chef/reports'
       action :enable
     end
-    
+
     # do the same but during the compile phase
     chef_handler "Chef::Handler::JsonFile" do
       source "chef/handler/json_file"
       arguments :path => '/var/chef/reports'
       action :nothing
     end.run_action(:enable)
-    
+
     # handle exceptions only
     chef_handler "Chef::Handler::JsonFile" do
       source "chef/handler/json_file"
@@ -54,11 +54,11 @@ It is best to declare `chef_handler` resources early on in the compile phase so 
       supports exception => true
       action :enable
     end
-    
-    
-    # enable the CloudkickHandler which was 
+
+
+    # enable the CloudkickHandler which was
     # dropped off in the default handler path.
-    # passes the oauth key/secret to the handler's 
+    # passes the oauth key/secret to the handler's
     # intializer.
     chef_handler "CloudkickHandler" do
       source "#{node['chef_handler']['handler_path']}/cloudkick_handler.rb"

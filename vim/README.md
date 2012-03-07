@@ -6,7 +6,11 @@ Installs vim.
 Requirements
 ============
 
-`vim` must be a valid package name that installs VIM - Vi IMproved.
+## Platform:
+
+* Ubuntu/Debian
+* Red Hat/CentOS/Fedora/Scientific
+* ArchLinux
 
 Attributes
 ==========

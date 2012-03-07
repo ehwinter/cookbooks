@@ -64,8 +64,10 @@ end
 # Clone git repos
 # ------------------------------
 
-jcloud="feedont@feedontheword.com:git/cloud"
-jfisn="feedont@feedontheword.com:git/fisn"
+#jcloud="feedont@feedontheword.com:git/cloud"
+mcloud="ubuntu@23.21.226.62:git/cloud"
+#jfisn="feedont@feedontheword.com:git/fisn"
+mfisn="ubuntu@23.21.226.62:git/fisn"
 gh="git@github.com:ehwinter"
 options="--depth 1"
 
@@ -77,7 +79,7 @@ options="--depth 1"
   git "/home/ubuntu/#{dir}" do
     user "ubuntu"
     group "ubuntu"
-    repository "#{jfisn}/#{dir}"
+    repository "#{mfisn}/#{dir}"
     reference "master"
     action :sync
   end
@@ -88,7 +90,7 @@ end
   git "/home/ubuntu/#{dir}" do
     user "ubuntu"
     group "ubuntu"
-    repository "#{jfisn}/#{dir}"
+    repository "#{mfisn}/#{dir}"
     reference "master"
     action :sync
   end
@@ -100,7 +102,7 @@ end
   git "/home/ubuntu/git/fisn/#{dir}" do
     user "ubuntu"
     group "ubuntu"
-    repository "#{jfisn}/#{dir}"
+    repository "#{mfisn}/#{dir}"
     reference "master"
     action :sync
   end
@@ -124,7 +126,7 @@ end
   git "/home/ubuntu/apps/#{dir}" do
     user "ubuntu"
     group "ubuntu"
-    repository "#{jfisn}/#{dir}"
+    repository "#{mfisn}/#{dir}"
     reference "master"
     action :sync
   end
